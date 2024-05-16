@@ -4,6 +4,7 @@ SELECT
     1 + CAST(t3.idade_base / 30 as INT) as idade_base_mes,
     COUNT(DISTINCT strftime('%m',t1.order_approved_at)) AS qtd_ativacao,
     ROUND(CAST(COUNT(DISTINCT strftime('%m',t1.order_approved_at)) AS FLOAT) / MIN(1 + CAST(t3.idade_base / 30 AS INT), 6),2) AS prop_ativacao,
+    CAST(JULIANDAY('2017-04-01') - JULIANDAY(MAX(t1.order_approved_at))AS INT) AS dias_sem_vender,
     ROUND(SUM(t2.price), 2) AS receita_total,
     ROUND(SUM(t2.price) / COUNT(DISTINCT t2.order_id), 2) AS ticket_medio,
     ROUND(SUM(t2.price) / MIN(1 + CAST(t3.idade_base / 30 AS INT), 6), 2) AS ticket_medio_mes,
