@@ -11,6 +11,7 @@ FROM (
         ROUND(CAST(COUNT(DISTINCT strftime('%m', t1.order_approved_at)) AS FLOAT) / MIN(1 + CAST(t3.idade_base / 30 AS INT), 6), 2) AS prop_ativacao,
         CAST(JULIANDAY('2017-04-01') - JULIANDAY(MAX(t1.order_approved_at)) AS INT) AS dias_sem_vender,
         SUM(CASE WHEN JULIANDAY(t1.order_estimated_delivery_date) < JULIANDAY(t1.order_delivered_customer_date) THEN 1 ELSE 0 END) / COUNT(DISTINCT t2.order_id) AS prop_atrasado,
+        CAST(AVG(JULIANDAY(t1.order_estimated_delivery_date) - JULIANDAY(t1.order_purchase_timestamp))AS INT) AS tempo_entrega_estimado,
         ROUND(SUM(t2.price), 2) AS receita_total,
         ROUND(SUM(t2.price) / COUNT(DISTINCT t2.order_id), 2) AS ticket_medio,
         ROUND(SUM(t2.price) / MIN(1 + CAST(t3.idade_base / 30 AS INT), 6), 2) AS ticket_medio_mes,
