@@ -33,28 +33,26 @@ query = query.format(date=date)
 # Estabelecendo uma conexão com o banco de dados
 engine = connect_db()
 
-try:
-    with engine.connect() as conn:
-        # Verificar se existem dados para a data especificada
-        result = conn.execute(sqlalchemy.text("SELECT COUNT(*) FROM tb_book_sellers WHERE dt_ref = :date"), {'date': date}).fetchone()
-        count = result[0]
-        
-        if count > 0:
-            # Se existirem dados, exclua-os
-            print("Tentando deletar registros existentes para a data especificada...", end="")
-            conn.execute(sqlalchemy.text("DELETE FROM tb_book_sellers WHERE dt_ref = :date"), {'date': date})
-            print("Registros deletados.")
-        else:
-            print("Nenhum registro encontrado para a data especificada.")
+with engine.connect() as conn:
+    try:
+        print("\n Tentando deletar...", end="")
+        conn.execute(sqlalchemy.text( "delete from tb_book_sellers where dt_ref = '{date}'".format(date=date) ))
+        print("ok.")
+    except:
+        print("Erro ao tentar deletar:")
 
-    # Inserir novos dados
-    print("Inserindo novos dados...")
-    pd.read_sql_query(query, engine).to_sql('tb_book_sellers', engine, if_exists='append', index=False)
-    print("Novos dados inseridos com sucesso.")
+    try:
+        print("\n Tentando criar tabela...", end="")
+        conn.execute(sqlalchemy.text('create table tb_book_sellers as\n {query}'.format(query=query)))
+        conn.commit()
+        print("ok.")
 
-except sqlalchemy.exc.SQLAlchemyError as e:
-    print(f"Ocorreu um erro de SQLAlchemy: {str(e)}")
-except Exception as e:
-    print(f"Ocorreu um erro: {str(e)}")
-
-conn.close()
+    except:
+        print("Erro ao tentar criar tabela:")
+        try:
+            print("\n Tabela já existente, inserindo dados...", end="")
+            conn.execute(sqlalchemy.text('insert into tb_book_sellers \n {query}'.format(query=query)))
+            conn.commit()
+            print("ok.\n")
+        except:
+            print("Erro ao inserir dados:")
