@@ -5,6 +5,7 @@ SELECT
 FROM (
     SELECT 
         t2.seller_id AS id_vendedor,
+        AVG(t5.review_score) AS review_media_score,
         t3.idade_base AS idade_base_dia,
         1 + CAST(t3.idade_base / 30 AS INT) AS idade_base_mes,
         COUNT(DISTINCT strftime('%m', t1.order_approved_at)) AS qtd_ativacao,
@@ -90,6 +91,8 @@ FROM (
     ) AS t3 ON t2.seller_id = t3.seller_id 
     LEFT JOIN 
         tb_products AS t4 ON t4.product_id = t2.product_id
+    LEFT JOIN 
+        tb_order_reviews AS t5 ON t1.order_id = t5.order_id
     WHERE 
         t1.order_approved_at BETWEEN '2016-10-01' AND '2017-04-01'
         AND t1.order_status = 'delivered'
