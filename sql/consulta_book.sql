@@ -1,1 +1,1 @@
-SELECT  COUNT(*) FROM tb_book_sellers 
+SELECT  * FROM tb_book_sellers 

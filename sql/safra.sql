@@ -11,4 +11,4 @@ LEFT JOIN (
     AND '2017-07-01'
     AND t1.order_status = 'delivered'
 ) AS t2
-ON t1.id_vendedor = t2.seller_id
+ON t1.seller_id = t2.seller_id

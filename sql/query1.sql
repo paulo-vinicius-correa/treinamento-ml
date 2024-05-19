@@ -4,7 +4,7 @@ SELECT  '{date}'  AS dt_ref,
     T1.*
 FROM (
     SELECT 
-        t2.seller_id AS id_vendedor,
+        t2.seller_id AS seller_id,
         AVG(t5.review_score) AS review_media_score,
         t3.idade_base AS idade_base_dia,
         1 + CAST(t3.idade_base / 30 AS INT) AS idade_base_mes,
@@ -100,6 +100,6 @@ FROM (
         t2.seller_id
 ) AS T1
 LEFT JOIN 
-    tb_sellers AS T2 ON T1.id_vendedor = T2.seller_id
+    tb_sellers AS T2 ON T1.seller_id = T2.seller_id
 ORDER BY qtd_venda DESC
 ;
