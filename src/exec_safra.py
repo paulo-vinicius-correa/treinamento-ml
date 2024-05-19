@@ -26,7 +26,7 @@ def connect_db():
     # Criando uma conexão com o banco de dados SQLite
     return sqlalchemy.create_engine("sqlite:///" + os.path.join(DATA_DIR, 'olist.db'))
 
-# Importando a consulta safra.sql
+# Importando a consulta
 query = import_query(os.path.join(QUERY_DIR, 'query1.sql'))
 query = query.format(date=date)
 

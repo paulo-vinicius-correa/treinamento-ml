@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS tb_abt_churn;
+CREATE TABLE tb_abt_churn AS
 SELECT
     t2.*,
     t1.flag_venda
